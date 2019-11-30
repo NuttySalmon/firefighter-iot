@@ -2,10 +2,14 @@ var express = require('express'),
     router = express.Router();
 
 router.get('/:id', (req, res) => {
-    var fighterName = req.params.id;
+    var fighterId = req.params.id;
     res.render('firefighter', {
-        title: fighterName + 'stats',
-        id: fighterName,
+        title: fighterId + ' stats',
+        fighter:{
+            id: fighterId,
+            team: 'Alpha',
+            name: 'J. Thompson'
+        },
         fields: [
             {name: 'Temperature', tag:'temp', unit:'&#176;C'},
             {name: 'Humidity', tag:'hum', unit: '&#37;'},
