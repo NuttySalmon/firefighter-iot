@@ -1,3 +1,109 @@
 <%- include('./partials/header') %>
-<%= name %>
+<link rel="stylesheet" href="/css/personal-chart.css">
+<div class="row">
+    <div class="col-4">
+      <div id="temp-overlay" class="overlay"><div id="text" class="overlay-text">No data</div></div>
+      <div id="temp-chart" class="chart"></div>
+    </div>
+    <div class="col-4">
+      <div id="humidity-overlay" class="overlay"><div id="text" class="overlay-text">No data</div></div>
+      <div id="humidity-chart" class="chart"></div>
+    </div>
+    <div class="col-4"></div>
+</div>
+
+<%- include('./partials/bootstrap-jquery') %> 
+
+<!-- Resources -->
+<script src="https://www.amcharts.com/lib/4/core.js"></script>
+<script src="https://www.amcharts.com/lib/4/charts.js"></script>
+<script src="https://www.amcharts.com/lib/4/themes/dark.js"></script>
+<script src="https://www.amcharts.com/lib/4/themes/animated.js"></script>
+<!-- Chart code -->
+<script>
+const testDate = "2019-12-01T08:30:00"
+var data = [];
+var date = new Date(testDate);
+date.setMilliseconds(0)
+date -= 2000;
+
+
+function getHistory(){
+  $.ajax({
+         url : '/api/firefighter/history',
+         type : 'GET',
+         dataType: 'json',
+         async: false,
+         data : {
+             'id' : '<%=id%>',
+             'count': 60,
+             'datetime': date
+         },
+         success : function(response) {        
+            console.log(response);      
+            data = response.data;
+         },
+         error : function(request, error) {
+             console.log("Request: "+JSON.stringify(request));
+         }
+  });
+  return data;
+}
+
+function generateSeries(field, data){
+  let series = [];
+  data.forEach(function(item){
+    series.push({
+      date: item.datetime,
+      value: item[field]
+    })
+  });
+  return series;
+}
+
+function startInterval() {
+  let data;
+  var i = 0;
+  interval = setInterval(function() {
+    $.ajax({
+           'url' : '/api/firefighter',
+           'type' : 'GET',
+           'data' : {
+               'id' : '<%=id%>',
+               'datetime': date
+           },
+           'success' : function(response) {              
+               data = response.data;
+           },
+           'error' : function(request,error) {
+               console.log("Request: "+JSON.stringify(request));
+           }
+       });
+    curr = new Date(testDate).setMilliseconds(0) - 1000 + i;
+    tempChart.addData({ date: curr, value: data.temp }, 1);
+    humChart.addData({ date: curr, value: data.hum }, 1);
+    i += 1000;
+  }, 1000);
+}
+
+
+am4core.ready(function() {
+  var history = getHistory();
+  tempChart = initGraph(TEMP_COLOR, "temp-chart", generateSeries('temp', history), 35);
+  humChart = initGraph(HUM_COLOR, "humidity-chart", generateSeries('hum', history), 35);
+
+  // add data
+  var interval;
+  var i = 0;
+ 
+  startInterval();
+});
+
+
+
+
+</script>
+<script src="/js/chart.js"></script>
+
+
 <%- include('./partials/footer') %> 

@@ -1,11 +1,11 @@
 var express = require('express'),
     router = express.Router();
 
-router.get('/:name', (req, res) => {
-    var fighterName = req.params.name;
+router.get('/:id', (req, res) => {
+    var fighterName = req.params.id;
     res.render('firefighter', {
         title: fighterName + 'stats',
-        name: fighterName
+        id: fighterName
     });
 });
 
