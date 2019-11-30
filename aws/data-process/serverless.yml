@@ -26,7 +26,7 @@ provider:
       Resource: !GetAtt MemberTable.Arn
 functions:
   data-process:
-    handler: data-process.saveToDB.handler
+    handler: saveToDB.handler
     events:
       - iot:
           sql: "SELECT * FROM 'firefighter/data'"
