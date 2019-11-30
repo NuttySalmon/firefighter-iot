@@ -31,7 +31,6 @@ router.get('/firefighter/history', (req, res) => {
         id: fighterId,
         data: getData.getFirefighterDataHistory(fighterId, datetime, count)
    };
-   console.log(payload);
    res.json(payload);   
 });
 

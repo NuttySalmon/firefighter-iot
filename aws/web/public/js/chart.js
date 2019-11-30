@@ -1,6 +1,12 @@
-const HEART_COLOR = "#FF0C0C"
-const HUM_COLOR = "#009CFF"
-const TEMP_COLOR = "#FF8400"
+const HEART_COLOR = "#FF0C0C";
+const HUM_COLOR = "#009CFF";
+const TEMP_COLOR = "#FF8400";
+const PRES_COLOR = "#FFFFFF";
+const CO_COLOR = "#FFFFFF";
+const O2_COLOR = "#FFFFFF";
+const HCN_COLOR = "#FFFFFF";
+const MOV_COLOR = "#FFFFFF";
+
 
 function initGraph(customColorStr, graphId, initData, verDist) {
   let customColor = am4core.color(customColorStr);
