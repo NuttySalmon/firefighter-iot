@@ -1,7 +1,9 @@
 body {
   background-color: #1B1D22;
   color: #fff;
+  font-family: 'Open Sans', sans-serif;
 }
+
 
 .overlay-text {
   position: absolute;
