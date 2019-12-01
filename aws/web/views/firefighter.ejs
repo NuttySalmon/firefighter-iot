@@ -1,5 +1,5 @@
 <%- include('./partials/header') %>
-<link rel="stylesheet" href="../css/personal-chart.css">
+<link rel="stylesheet" href="<%=staticPath%>css/personal-chart.css%>">
 <div class="card bg-dark">
   <div class="card-header chart-card-title">
     <div class = "row"> 
@@ -46,7 +46,7 @@
 <script src="https://www.amcharts.com/lib/4/themes/dark.js"></script>
 <script src="https://www.amcharts.com/lib/4/themes/animated.js"></script>
 <!-- Chart code -->
-<script src="../js/chart.js"></script>
+<script src="<%=staticPath%>js/chart.js"></script>
 <script>
 const testDate = "2019-12-01T08:30:00"
 var data = [];
