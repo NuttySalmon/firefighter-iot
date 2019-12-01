@@ -1,3 +1,108 @@
 <%- include('./partials/header') %>
-<%= test %>
+    <style>
+      /* Always set the map height explicitly to define the size of the div
+       * element that contains the map. */
+      #map {
+        height: 100%;
+      }
+      /* Optional: Makes the sample page fill the window. */
+      html, body {
+        height: 100%;
+        margin: 0;
+        padding: 0;
+      }
+    </style>
+
+    <div id="map"></div>
+    
+    <%- include('./partials/bootstrap-jquery') %> 
+
+    <script>
+    var markers = {};
+    var bounds;
+       
+    function initMap() {
+        var map = new google.maps.Map(document.getElementById('map'), {
+          center: new google.maps.LatLng(38.5616539,-121.512952),
+          zoom: 12
+        });
+
+        var infoWindow = new google.maps.InfoWindow;
+                    
+        bounds = new google.maps.LatLngBounds();
+        var id = "aasdf"
+
+        // Change this depending on the name of your PHP or XML file
+        startInterval((teams)=>{
+            teams.forEach((team)=>{
+                var id = team.id;
+                if (markers[id] === undefined){
+                    var name = team.name;
+                    var members = team.membersId
+                    var infowincontent = document.createElement('div');
+                    var att = document.createAttribute("style");       
+                    att.value = "color: black";       
+                    infowincontent.setAttributeNode(att);   
+                    var strong = document.createElement('strong');
+                    strong.textContent = name
+                    infowincontent.appendChild(strong);
+                    infowincontent.appendChild(document.createElement('br'));
+
+                    var text = document.createElement('text');
+                    text.textContent = members
+                    infowincontent.appendChild(text);
+                    var icon = {
+                        label: id.toString(),
+                        img: "../images/helmet.png"
+                    } || {};
+                    var marker = new google.maps.Marker({
+                        title: name,
+                        map: map,
+                        position: point, 
+                        label: icon.label,
+                        icon: icon.img
+                    });
+                    marker.addListener('click', function() {
+                        infoWindow.setContent(infowincontent);
+                        infoWindow.open(map, marker);
+                    });
+                    markers[id] = marker;
+                
+                }
+                var currMarker = markers[id];
+                var point = new google.maps.LatLng(
+                  parseFloat(team.pos.lat),
+                  parseFloat(team.pos.lng));
+
+                currMarker.setPosition(point);
+                bounds.extend(currMarker.position);
+                map.fitBounds(bounds);
+                if (map.getZoom() > 17)
+                    map.setZoom(17);
+            });
+        });       
+    }
+
+    function startInterval(callback) {
+      // let data;
+      var date = new Date();
+      interval = setInterval(()=>{
+        $.ajax({
+               url : '../api/teams',
+               type : 'GET',
+               success : (response) => {   
+                  callback(response.data);
+               },
+               error : (request,error)  => {
+
+               }
+        });
+      }, 1000);
+    }
+
+    
+    </script>
+    <script async defer
+    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCf0GTb9p4ksFKrcs_fms33bIb_AEniq7I&callback=initMap">
+    </script>
 <%- include('./partials/footer') %> 

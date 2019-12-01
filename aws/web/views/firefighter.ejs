@@ -1,5 +1,5 @@
 <%- include('./partials/header') %>
-<link rel="stylesheet" href="/css/personal-chart.css">
+<link rel="stylesheet" href="../css/personal-chart.css">
 <div class="card bg-dark">
   <div class="card-header chart-card-title">
     <div class = "row"> 
@@ -46,6 +46,7 @@
 <script src="https://www.amcharts.com/lib/4/themes/dark.js"></script>
 <script src="https://www.amcharts.com/lib/4/themes/animated.js"></script>
 <!-- Chart code -->
+<script src="../js/chart.js"></script>
 <script>
 const testDate = "2019-12-01T08:30:00"
 var data = [];
@@ -54,22 +55,21 @@ date.setMilliseconds(0)
 date -= 2000;
 
 
-function getHistory(){
+function getHistory(id, callback){
   $.ajax({
-         url : '/api/firefighter/history',
+         url : '../api/firefighter/history',
          type : 'GET',
          dataType: 'json',
-         async: false,
          data : {
-             'id' : '<%=fighter.id%>',
+             'id' : id,
              'count': 60,
              'datetime': date
          },
-         success : function(response) { 
+         success : (response)=> { 
             $('.overlay').css("display", "none");           
-            data = response.data;
+            callback(response.data);
          },
-         error : function(request, error) {
+         error : (request, error) =>{
              $('.overlay').css("display", "block");
          }
   });
@@ -78,7 +78,7 @@ function getHistory(){
 
 function generateSeries(field, data){
   let series = [];
-  data.forEach(function(item){
+  data.forEach((item)=>{
     series.push({
       date: item.datetime,
       value: item[field]
@@ -88,22 +88,22 @@ function generateSeries(field, data){
 }
 
 var i = 0;
-function startInterval() {
+function startInterval(id, callback) {
   let data;
 
-  interval = setInterval(function() {
+  interval = setInterval(()=>{
     $.ajax({
-           'url' : '/api/firefighter',
+           'url' : '../api/firefighter',
            'type' : 'GET',
            'data' : {
-               'id' : '<%=fighter.id%>',
+               'id' : id,
                'datetime': date
            },
-           'success' : function(response) {   
+           'success' : (response) => {   
                $('.overlay').css("display", "none");             
-               addData(response.data);
+               callback(response.data);
            },
-           'error' : function(request,error) {
+           'error' : (request,error) => {
               $('.overlay').css("display", "block");
            }
     });
@@ -112,7 +112,7 @@ function startInterval() {
 
 function addData(data){
    curr = new Date(testDate).setMilliseconds(0) - 1000 + i;
-    <% fields.forEach(function(field){%>
+    <% fields.forEach((field) => {%>
     if(data.<%=field.tag%> == undefined){
       $('#<%=field.tag%>-value').html('');
       $('#<%=field.tag%>-overlay').css('display', 'block');
@@ -125,9 +125,8 @@ function addData(data){
     i += 1000;
 }
 
-am4core.ready(function(
-  ) {
-  var history = getHistory();
+am4core.ready(function(){
+  getHistory("<%=fighter.id%>",(history) => {
   let varDist = 35;
   <% fields.forEach(function(field){%>
   <%=field.tag%>Chart = initGraph(<%=field.tag.toUpperCase()%>_COLOR, "<%=field.tag%>-chart", generateSeries("<%=field.tag%>", history), varDist);
@@ -136,7 +135,8 @@ am4core.ready(function(
   var interval;
   var i = 0;
  
-  startInterval();
+  startInterval("<%=fighter.id%>", addData);
+  });
 });
 
 
@@ -144,7 +144,7 @@ am4core.ready(function(
 
 
 </script>
-<script src="/js/chart.js"></script>
+
 
 
 <%- include('./partials/footer') %> 
