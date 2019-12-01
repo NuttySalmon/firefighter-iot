@@ -18,7 +18,7 @@ provider:
       Resource: !ImportValue MemberTableArn
 functions:
   web:
-    handler: app.server # reference the file and exported method
+    handler: serverless-app.server # reference the file and exported method
     events: # events trigger lambda functions
       - http: # this is an API Gateway HTTP event trigger
           path: /
@@ -28,3 +28,40 @@ functions:
           path: /{proxy+}
           method: ANY
           cors: true
+
+resources:
+  Resources:
+    AssetsBucket:
+      Type: AWS::S3::Bucket
+      Properties:
+        BucketName: ${file(./config.js):s3Name}
+        AccessControl: PublicRead
+        WebsiteConfiguration:
+          IndexDocument: index.html
+          ErrorDocument: error.html
+    BucketPolicy:
+      Type: AWS::S3::BucketPolicy
+      Properties:
+        PolicyDocument:
+          Id: PublicAccessPolicy
+          Statement:
+            - Sid: PublicReadForGetBucketObjects
+              Effect: Allow
+              Principal: '*'
+              Action: 's3:GetObject'
+              Resource: !Join 
+               - ''
+               - - 'arn:aws:s3:::'
+                 - !Ref AssetsBucket
+                 - /*
+        Bucket: !Ref AssetsBucket
+
+
+plugins:
+    - serverless-s3-sync
+
+custom:
+  s3Sync:
+    - bucketName: ${self:resources.Resources.AssetsBucket.Properties.BucketName} # required
+      localDir: ../static
+      acl: public-read
