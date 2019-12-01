@@ -46,105 +46,34 @@
 <script src="https://www.amcharts.com/lib/4/themes/dark.js"></script>
 <script src="https://www.amcharts.com/lib/4/themes/animated.js"></script>
 <!-- Chart code -->
+
 <script src="<%=staticPath%>js/chart.js"></script>
 <script>
-const testDate = "2019-12-01T08:30:00"
-var data = [];
-var date = new Date(testDate);
-date.setMilliseconds(0)
-date -= 2000;
-
-
-function getHistory(id, callback){
-  $.ajax({
-         url : '../api/firefighter/history',
-         type : 'GET',
-         dataType: 'json',
-         data : {
-             'id' : id,
-             'count': 60,
-             'datetime': date
-         },
-         success : (response)=> { 
-            $('.overlay').css("display", "none");           
-            callback(response.data);
-         },
-         error : (request, error) =>{
-             $('.overlay').css("display", "block");
-         }
-  });
-  return data;
-}
-
-function generateSeries(field, data){
-  let series = [];
-  data.forEach((item)=>{
-    series.push({
-      date: item.datetime,
-      value: item[field]
-    })
-  });
-  return series;
-}
-
-var i = 0;
-function startInterval(id, callback) {
-  let data;
-
-  interval = setInterval(()=>{
-    $.ajax({
-           'url' : '../api/firefighter',
-           'type' : 'GET',
-           'data' : {
-               'id' : id,
-               'datetime': date
-           },
-           'success' : (response) => {   
-               $('.overlay').css("display", "none");             
-               callback(response.data);
-           },
-           'error' : (request,error) => {
-              $('.overlay').css("display", "block");
-           }
-    });
-  }, 1000);
-}
-
-function addData(data){
-   curr = new Date(testDate).setMilliseconds(0) - 1000 + i;
-    <% fields.forEach((field) => {%>
-    if(data.<%=field.tag%> == undefined){
-      $('#<%=field.tag%>-value').html('');
-      $('#<%=field.tag%>-overlay').css('display', 'block');
-    } else{
-      $('#<%=field.tag%>-overlay').css('display', 'none');
-      $('#<%=field.tag%>-value').html(data.<%=field.tag%>.toFixed(2));
-      <%=field.tag%>Chart.addData({ date: curr, value: data.<%=field.tag%>}, 1);
-    }
-    <%});%>
-    i += 1000;
-}
-
 am4core.ready(function(){
-  getHistory("<%=fighter.id%>",(history) => {
-  let varDist = 35;
-  <% fields.forEach(function(field){%>
-  <%=field.tag%>Chart = initGraph(<%=field.tag.toUpperCase()%>_COLOR, "<%=field.tag%>-chart", generateSeries("<%=field.tag%>", history), varDist);
-  <%});%>
-  // add data
-  var interval;
-  var i = 0;
- 
-  startInterval("<%=fighter.id%>", addData);
+  var id = "<%=fighter.id%>"
+  var charts = {}; // keep track of all the charts
+  var fields = <%-JSON.stringify(fields)%>;
+  const dataPoints = 60;
+  const verDist = 35;
+  const horDist = 10;
+  const interval = 1000; // interval to get data
+  getHistory(id, dataPoints, (history) => {
+    fields.forEach((field) => {
+      var graphId =  field.tag + "-chart";
+      var initialData = generateSeries(field.tag, history);
+      let chart = initGraph(COLORS[field.tag], graphId, initialData, horDist, verDist);
+      charts[field.tag] = chart;
+    });
+  });
+  // start timed job
+  startInterval(id, interval, (data, i)=>{
+    curr = new Date(testDate).setMilliseconds(0) - interval + i;
+    fields.forEach((field) => {
+      let tag = field.tag;
+      updateData(charts[tag], tag, data[tag]); // add new data
+    });
   });
 });
-
-
-
-
-
 </script>
-
-
-
+<script async defer src="<%=staticPath%>js/chart_init.js"></script>
 <%- include('./partials/footer') %> 
