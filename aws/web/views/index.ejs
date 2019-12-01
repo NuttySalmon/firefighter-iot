@@ -18,6 +18,10 @@
     <%- include('./partials/bootstrap-jquery') %> 
 
     <script>
+    var icons = {
+      "Deployed": "../images/helmet.png",
+      "Enroute": "../images/truck.png"
+    }
     var markers = {};
     var bounds;
        
@@ -37,44 +41,38 @@
             teams.forEach((team)=>{
                 var id = team.id;
                 if (markers[id] === undefined){
-                    var name = team.name;
-                    var members = team.membersId
-                    var infowincontent = document.createElement('div');
-                    var att = document.createAttribute("style");       
-                    att.value = "color: black";       
-                    infowincontent.setAttributeNode(att);   
-                    var strong = document.createElement('strong');
-                    strong.textContent = name
-                    infowincontent.appendChild(strong);
-                    infowincontent.appendChild(document.createElement('br'));
-
-                    var text = document.createElement('text');
-                    text.textContent = members
-                    infowincontent.appendChild(text);
-                    var icon = {
-                        label: id.toString(),
-                        img: "../images/helmet.png"
-                    } || {};
+                    var label = id.toString() || "";
                     var marker = new google.maps.Marker({
                         title: name,
                         map: map,
                         position: point, 
-                        label: icon.label,
-                        icon: icon.img
-                    });
-                    marker.addListener('click', function() {
-                        infoWindow.setContent(infowincontent);
-                        infoWindow.open(map, marker);
+                        label: label
                     });
                     markers[id] = marker;
-                
                 }
+
                 var currMarker = markers[id];
                 var point = new google.maps.LatLng(
                   parseFloat(team.pos.lat),
                   parseFloat(team.pos.lng));
 
+                //clear all listeners
+                google.maps.event.clearListeners(currMarker, 'click');
+                //popup content
+                let infowincontent = '<div style="color: black"><b><a href="../team/' + id + '">' + 
+                                team.name + 
+                                '</b><a><br/>Status: '+
+                                team.status + '<br/> Devices: ' +
+                                team.membersId +
+                                '</div>';
+
+               
                 currMarker.setPosition(point);
+                currMarker.setIcon(icons[team.status]  || icons["Deployed"]);
+                currMarker.addListener('click', function() {
+                    infoWindow.setContent(infowincontent);
+                    infoWindow.open(map, currMarker);
+                });
                 bounds.extend(currMarker.position);
                 map.fitBounds(bounds);
                 if (map.getZoom() > 17)

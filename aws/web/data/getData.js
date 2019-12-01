@@ -7,6 +7,7 @@ var fakeData = [
     {lat: 38.6251146, lng: -121.461503},   
 ];
 
+var fakeStatus = ['', 'Deployed', 'Deployed', 'Deployed', 'Enroute', 'Deployed',]
 function getFirefighterData(id, datetime){
     var result = {   
             datetime: datetime,
@@ -44,7 +45,7 @@ function getTeamInfo(id){
             lat: fakeData[id].lat + Math.random()/5000,
             lng: fakeData[id].lng +  Math.random()/5000
         },
-        status: 'Deployed',
+        status: fakeStatus[id],
         membersId: ['iotDevice' + id + '1', 'iotDevice' + id + '2']
     }
     return result;
@@ -53,3 +54,4 @@ function getTeamInfo(id){
 module.exports.getFirefighterData = getFirefighterData;
 module.exports.getFirefighterDataHistory = getFirefighterDataHistory;
 module.exports.getTeams = getTeams;
+module.exports.getTeamInfo = getTeamInfo;

@@ -10,6 +10,7 @@ app.set('view engine', 'ejs');
 app.use(express.static('public'));
 app.use("/firefighter", require('./routes/firefighter'));
 app.use("/api", require('./routes/api'));
+app.use("/team", require('./routes/team'));
 app.use("/", require('./routes/index'));
 
 //for debugging
