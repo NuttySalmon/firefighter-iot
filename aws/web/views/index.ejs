@@ -13,49 +13,48 @@
       }
     </style>
 
+    <div id="map-overlay" class="overlay"><div id="text" class="overlay-text">No data</div></div>
     <div id="map"></div>
     
     <%- include('./partials/bootstrap-jquery') %> 
 
     <script>
     var icons = {
-      "Deployed": "../images/helmet.png",
-      "Enroute": "../images/truck.png"
+      "Deployed": "<%=staticPath%>images/helmet.png",
+      "Enroute": "<%=staticPath%>images/truck.png%>"
     }
     var markers = {};
-    var bounds;
-       
+    var map;
     function initMap() {
-        var map = new google.maps.Map(document.getElementById('map'), {
+          map = new google.maps.Map(document.getElementById('map'), {
           center: new google.maps.LatLng(38.5616539,-121.512952),
           zoom: 12
         });
 
         var infoWindow = new google.maps.InfoWindow;
                     
-        bounds = new google.maps.LatLngBounds();
+       
         var id = "aasdf"
 
         // Change this depending on the name of your PHP or XML file
         startInterval((teams)=>{
             teams.forEach((team)=>{
                 var id = team.id;
+                var point = new google.maps.LatLng(
+                  parseFloat(team.pos.lat),
+                  parseFloat(team.pos.lng));
                 if (markers[id] === undefined){
                     var label = id.toString() || "";
                     var marker = new google.maps.Marker({
                         title: name,
                         map: map,
-                        position: point, 
                         label: label
                     });
+                    zoomToFit(point);
                     markers[id] = marker;
                 }
 
                 var currMarker = markers[id];
-                var point = new google.maps.LatLng(
-                  parseFloat(team.pos.lat),
-                  parseFloat(team.pos.lng));
-
                 //clear all listeners
                 google.maps.event.clearListeners(currMarker, 'click');
                 //popup content
@@ -73,12 +72,24 @@
                     infoWindow.setContent(infowincontent);
                     infoWindow.open(map, currMarker);
                 });
-                bounds.extend(currMarker.position);
-                map.fitBounds(bounds);
-                if (map.getZoom() > 17)
-                    map.setZoom(17);
+                
+
+                
             });
         });       
+    }
+
+    function zoomToFit(newPoint){
+       let bounds = new google.maps.LatLngBounds();
+       for (var key in markers){
+        bounds.extend(markers[key].position);
+       }
+       if (newPoint != null){
+        bounds.extend(newPoint);
+       }
+       map.fitBounds(bounds);
+       if (map.getZoom() > 17)
+         map.setZoom(17);
     }
 
     function startInterval(callback) {
@@ -88,11 +99,12 @@
         $.ajax({
                url : '../api/teams',
                type : 'GET',
-               success : (response) => {   
+               success : (response) => {
+                  $('.overlay').css('display', 'none');
                   callback(response.data);
                },
                error : (request,error)  => {
-
+                  $('.overlay').css('display', 'block');
                }
         });
       }, 1000);
@@ -101,6 +113,6 @@
     
     </script>
     <script async defer
-    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCf0GTb9p4ksFKrcs_fms33bIb_AEniq7I&callback=initMap">
+    src="https://maps.googleapis.com/maps/api/js?key=<%=googleMapsAPIKey%>&callback=initMap">
     </script>
 <%- include('./partials/footer') %> 
