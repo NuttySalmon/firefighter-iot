@@ -41,7 +41,6 @@ router.get('/teams', (req, res) => {
         data: getData.getTeams()
    };
    res.json(payload);   
-   console.log(payload);
 });
 
 module.exports = router;
