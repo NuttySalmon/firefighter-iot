@@ -7,4 +7,4 @@ module.exports.s3Name = () => {return s3Name}
 module.exports.s3Path = 'http://' + s3Name + '.s3-website-'+ awsRegion + '.amazonaws.com/'
 module.exports.googleMapsAPIKey = googleMapsAPIKey;
 module.exports.googleMapsAPIKeyLocal = googleMapsAPIKeyLocal;
-module.exports.awsRegion ()=> { return awsRegion };
+module.exports.awsRegion = ()=> { return awsRegion };
