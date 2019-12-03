@@ -1,7 +1,13 @@
 {
-	"host": "", // AWS endpoint
-	"rootCA": "", // path to root ca
-	"cert": "", // path to certificate
-	"privkey": "", // path to private key
-	"clientId": "", // client id
+	"host": "",
+	"rootCA": "",
+	"cert": "", 
+	"privkey": "", 
+	"clientId": "",
+    "devices":[ 
+        {
+            "addr": "",
+            "deviceId": ""
+        }
+    ]
 }
