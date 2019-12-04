@@ -8,14 +8,45 @@ var fakeData = [
 ];
 
 var fakeStatus = ['', 'Deployed', 'Deployed', 'Deployed', 'Enroute', 'Deployed',]
+
+
 function getFirefighterData(id, datetime){
-    var result = {   
+/*    var result = {   
             datetime: datetime,
             status: 'Active',
             temp: (Math.random() > 0.5 ? 1 : -1) * Math.random()/10 + 100,
             hum: (Math.random() > 0.5 ? 1 : -1) * Math.random()/10 + 50,
         };
-    return result;
+		return  result;
+*/
+
+/*****************Declare DynamoDB Service*************************************/
+// Load the AWS SDK for Node.js
+var AWS = require('aws-sdk');
+// Set the region 
+AWS.config.update({region: 'us-east-1'});
+
+// Create the DynamoDB service object
+var ddb = new AWS.DynamoDB({apiVersion: '2012-08-10'});
+/*****************End DynamoDB Service*************************************/
+	var params = {
+	  Key: {
+	   "id": {
+		 N: id
+		}, 
+	   "datetime": {
+		 S: datetime 
+		}
+	  }, 
+	  TableName: "Teams"
+	 };
+	};
+	 ddb.getItem(params, function(err, data) {
+	   if (err) console.log(err, err.stack); // an error occurred
+	   else     console.log(data);           // successful response
+	 });
+/*****************End Get Firefighter Data*************************************/
+     return data;
 }
 
 function getFirefighterDataHistory(id, datetime, count){
