@@ -50,7 +50,6 @@ var ddb = new AWS.DynamoDB({apiVersion: '2012-08-10'});
 		}
 	  }, 
 	  TableName: "Members"
-	 };
 	};
 	 ddb.getItem(params, function(err, data) {
 	   if (err) console.log(err, err.stack); // an error occurred
