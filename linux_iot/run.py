@@ -1,5 +1,15 @@
-from aws_iot_client import AWSIOTClient, Config
+from aws_iot_client import AWSIOTClient
+from sensor import Sensor
 import json
+class Config:
+    def __init__(self, host, rootCA, cert, privkey, clientId, devices):
+        self.host = host
+        self.rootCA = rootCA
+        self.cert = cert
+        self.privkey = privkey
+        self.clientId = clientId
+        self.devices = devices
+
 
 def main():
 	config_json = open('./config.json')

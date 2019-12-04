@@ -14,15 +14,6 @@ streamHandler.setFormatter(formatter)
 logger.addHandler(streamHandler)
 
 
-class Config:
-    def __init__(self, host, rootCA, cert, privkey, clientId):
-        self.host = host
-        self.rootCA = rootCA
-        self.cert = cert
-        self.privkey = privkey
-        self.clientId = clientId
-
-
 class AWSIOTClient:
     """Used to connect and publish to AWS IOT
     :param Config config: configuration for AWS IOT
