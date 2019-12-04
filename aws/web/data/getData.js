@@ -1,3 +1,6 @@
+var AWS = require('aws-sdk');
+var dynamodb = new AWS.DynamoDB();
+
 var fakeData = [
     {},
     {lat: 38.5818756, lng: -121.493181},
@@ -14,6 +17,13 @@ function getFirefighterData(id, datetime){
             status: 'Active',
             temp: (Math.random() > 0.5 ? 1 : -1) * Math.random()/10 + 100,
             hum: (Math.random() > 0.5 ? 1 : -1) * Math.random()/10 + 50,
+			//pres: ,
+			o2: (Math.random() > 0.5 ? 1 : -1) * Math.random()/10 + 40,
+			co: (Math.random() > 0.5 ? 1 : -1) * Math.random()/10 + 60,
+			hcn: (Math.random() > 0.5 ? 1 : -1) * Math.random()/10 + 50,
+			heart: (Math.random() > 0.5 ? 20 : -20) * Math.random()/10 + 160
+			//mov: ,
+			//battery:
         };
     return result;
 }

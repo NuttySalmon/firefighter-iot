@@ -2,11 +2,12 @@ const COLORS = {
   heart: "#FF0C0C",
   hum: "#009CFF",
   temp: "#FF8400",
-  pres: "#FFFFFF",
-  co: "#FFFFFF",
-  o2: "#FFFFFF",
-  hcn: "#FFFFFF",
-  mov: "#FFFFFF"
+  pres: "#FAB4B4",
+  co: "#7EF27E",
+  o2: "#CCD0DE",
+  hcn: "#D7C1E0",
+  mov: "#D5C4A1",
+  battery: "#ACE8D5"
 }
 
 // for mock data
