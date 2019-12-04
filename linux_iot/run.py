@@ -5,7 +5,7 @@ from datetime import datetime
 import threading
 import json
 from concurrent.futures import ProcessPoolExecutor as executor
-
+from random import random 
 
 class Config:
     def __init__(self, host, rootCA, cert, privkey, clientId, devices):
@@ -16,30 +16,35 @@ class Config:
         self.clientId = clientId
         self.devices = devices
 
-def connect_all(devices):
-    for device in devices:
-        thread = threading.Thread(target=connect, args=(device,))
-        thread.run()
-
-   
 def connect(device):
     lock = device.lock
+    print("{} lock: {}".format(device.deviceId, lock.locked()))
     if not lock.locked():
         with lock:
             if not device.connected:
+                print('Attempt to connect to {}'.format(device.deviceId), flush=True)
                 device.connect()
 
-def publish(devices, client):
+def start_publish(devices, client):
     while True:
         data = []
         for device in devices:
-            data.append(device.get_data())            
+            if not device.connected:
+                t = threading.Thread(target=connect, args=(device,))
+                t.start()
+            try:
+                data.append(device.get_data())            
+            except Exception as e:
+                device.disconnect()
+                print(e)
 
         payload = {
             "clientId": client.config.clientId,  
             "datetime": datetime.now().replace(microsecond=0).isoformat(),
             "status": "Deployed",
-            "members": data
+            "members": data,
+            "lat": 38.5818756 + random()/4000,
+            "lng": -121.493181 + random()/4000
         }
         client.publish(payload) 
         time.sleep(1)
@@ -50,23 +55,18 @@ def main():
     config = Config(**json.load(config_json))
     client = AWSIOTClient(config)
     devices = []
-
+    
     for info in config.devices:
         device = Sensor(info['addr'], info['deviceId'])
         devices.append(device)
     
-        connect_thread = threading.Thread(target=connect_all, args=(devices,))
-        publish_thread = threading.Thread(target=publish, args=(devices, client))
+    start_publish(devices, client)
 
-        connect_thread.start()
-        publish_thread.start()
-
-    
     for t in threading.enumerate():
         if t is not threading.current_thread():
             t.join()
 
-                       
+                   
 if __name__ == '__main__':
 	main()
 

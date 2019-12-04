@@ -44,9 +44,11 @@ class Sensor:
             return False
 
     def disconnect(self):
-        if self.connected == True:
-            self.device.disconnect()
-            self.connected = False
+        try:
+            if self.connected == True:
+                self.device.disconnect()
+        finally:
+                self.connected = False
 
     def get_data(self):
         data = { 'deviceId': self.deviceId }
@@ -96,10 +98,10 @@ class Sensor:
         return 85
 
     def get_hcn(self):
-        return uniform(30, 75) 
+        return uniform(68, 75) 
 
     def get_co(self):
-        return  uniform(800, 1300)
+        return  uniform(1270, 1300)
 
     def get_temp_pres(self):
         return self.device.barometer.read()
