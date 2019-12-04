@@ -39,14 +39,10 @@ resources: # CloudFormation template syntax from here on.
         TableName: Teams
         AttributeDefinitions:
           - AttributeName: id
-            AttributeType: S
-          - AttributeName: datetime
-            AttributeType: S
+            AttributeType: N
         KeySchema:
           - AttributeName: id
             KeyType: HASH
-          - AttributeName: datetime
-            KeyType: RANGE
         ProvisionedThroughput:
           ReadCapacityUnits: 1
           WriteCapacityUnits: 1
