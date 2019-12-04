@@ -37,7 +37,7 @@ def publish(devices, client):
 
         payload = {
             "clientId": client.config.clientId,  
-            "datetime": datetime.now().strftime("%Y%m%d%H%M%S"),
+            "datetime": datetime.now().replace(microsecond=0).isoformat(),
             "status": "Deployed",
             "members": data
         }
