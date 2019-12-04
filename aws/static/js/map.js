@@ -12,8 +12,8 @@ function initMap() {
     teams.forEach((team) => {
       var id = team.id;
       var point = new google.maps.LatLng(
-        parseFloat(team.pos.lat),
-        parseFloat(team.pos.lng));
+        parseFloat(team.lat),
+        parseFloat(team.lng));
       if (markers[id] === undefined) {
         var label = id.toString() || "";
         var marker = new google.maps.Marker({
@@ -30,10 +30,10 @@ function initMap() {
       google.maps.event.clearListeners(currMarker, 'click');
       //popup content
       let infowincontent = '<div style="color: black"><b><a href="../team/' + id + '">' +
-        team.name +
+        id +
         '</b><a><br/>Status: ' +
         team.status + '<br/> Devices: ' +
-        team.membersId +
+        team.members +
         '</div>';
 
 

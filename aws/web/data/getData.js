@@ -60,12 +60,21 @@ function getFirefighterDataHistory(id, epoch, count){
 
 var noOfTeams = 5;
 
-function getTeams(){
-    var result = []
-    for (var i = 0; i < noOfTeams; i++){
-        result.push(getTeamInfo(i + 1))
-    }
-    return result;
+function getTeams(callback){
+    
+    var params = {
+              TableName: "Teams"
+             };
+     ddb.scan(params, (err, result)=>{
+        if (err)
+            callback("error");
+        else
+            var teams = []
+            result.Items.forEach((item)=>{
+                teams.push(AWS.DynamoDB.Converter.unmarshall(item));
+            })
+            callback(teams);    
+    });  
 }
 
 function getTeamInfo(id){

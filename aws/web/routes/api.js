@@ -37,13 +37,16 @@ router.get('/firefighter/history', (req, res) => {
    res.json(payload);   
 });
 
-router.get('/teams', (req, res) => {
-   var payload = {
-        code: 200, 
-        status: "success",
-        data: getData.getTeams()
-   };
-   res.json(payload);   
-});
 
+router.get('/teams', (req, res) => {
+  getData.getTeams((data)=>{
+    var payload = {
+         code: 200, 
+         status: "success",
+         data: data
+    };
+    res.json(payload);   
+  })
+  
+});
 module.exports = router;

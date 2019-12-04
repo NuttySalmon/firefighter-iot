@@ -81,7 +81,7 @@ Start interval to get data
 */
 function startInterval(id, interval, callback) {
   setInterval(()=>{
-    let epoch = new Date() - 4000;
+    let epoch = new Date() - 2000;
     let datetime = getISOLocal(new Date(epoch));
     let payload = {
       id: id, 
