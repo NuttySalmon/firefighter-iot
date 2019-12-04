@@ -13,7 +13,6 @@ var ddb = new AWS.DynamoDB();
 
 exports.handler = (event, context, callback) =>{
 
-
 	var members = []; // for team info
 	var requests = [];
 	

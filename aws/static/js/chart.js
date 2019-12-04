@@ -10,25 +10,37 @@ const COLORS = {
   battery: "#ACE8D5"
 }
 
-// for mock data
-const testDate = "2019-12-01T08:30:00"
-var data = [];
-var date = new Date(testDate);
-date.setMilliseconds(0)
-date -= 2000;
+function getISOLocal(date) {
+    const offsetMs = date.getTimezoneOffset() * 60 * 1000;
+    const msLocal =  date.getTime() - offsetMs;
+    const dateLocal = new Date(msLocal);
+    const iso = dateLocal.toISOString();
+    const isoLocal = iso.slice(0, 19);
+    return isoLocal.toString();
+}
+
+
+// // for mock data
+// const testDate = "2019-12-01T08:30:00"
+// var data = [];
+// var date = new Date(testDate);
+// date.setMilliseconds(0)
+// date -= 2000;
 
 /**
 Get past data to initialize graph
 */
 function getHistory(id, dataPoints, callback){
+  let epoch = new Date() - 5000;
+
   let url = '../api/firefighter/history';
   let payload = {
     'id' : id,
     'count': dataPoints,
-    'datetime': date
+    'datetime': Math.round(new Date().getTime() / 1000) * 1000
+
   };
   getData(url, payload, callback);
-  return data;
 }
 
 /**
@@ -38,7 +50,7 @@ function generateSeries(field, data){
   let series = [];
   data.forEach((item)=>{
     series.push({
-      date: item.datetime,
+      date: new Date(item.datetime),
       value: item[field]
     })
   });
@@ -48,7 +60,7 @@ function generateSeries(field, data){
 /**
 Add data to chart
 */
-function updateData(chart, tag, value){
+function updateData(chart, tag, value, iso){
   let valueQuery = '#'+ tag + '-value';
   let overlayQuery = '#'+ tag + '-overlay'
   if(value == undefined){
@@ -57,7 +69,10 @@ function updateData(chart, tag, value){
   } else{
     $(overlayQuery).css('display', 'none');
     $(valueQuery).html(value.toFixed(2));
-    chart.addData({ date: curr, value: value}, 1);
+    chart.addData({ 
+      date:  new Date(iso) , 
+      value: value
+    }, 1);
   }
 }
 
@@ -65,16 +80,15 @@ function updateData(chart, tag, value){
 Start interval to get data
 */
 function startInterval(id, interval, callback) {
-  let i = 0;
-  let dataDatetime = date + i;
-  let payload = {
-    id: id, 
-    datetime: date + i
-  };
   setInterval(()=>{
+    let epoch = new Date() - 4000;
+    let datetime = getISOLocal(new Date(epoch));
+    let payload = {
+      id: id, 
+      datetime: datetime
+    };
     getData('../api/firefighter', payload, (data)=>{
-      callback(data, i);
-      i += interval;
+      callback(data);
     });
   }, interval);
 }
@@ -89,8 +103,12 @@ function getData(url, payload, callback){
     type : 'GET',
     data : payload,
     success : (response) => {   
-       $('.overlay').css("display", "none");             
-       callback(response.data);
+        if (response.data == null) {
+          $('.overlay').css("display", "block"); 
+        } else {
+          $('.overlay').css("display", "none");             
+          callback(response.data);
+        }
     },
     error : (request,error) => {
       $('.overlay').css("display", "block");

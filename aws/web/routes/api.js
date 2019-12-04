@@ -8,15 +8,18 @@ router.get('/firefighter/', (req, res) => {
     var payload = {};
     if (fighterId === undefined|| datetime === undefined){
         payload = {code: 400, status:"fail"};
+        res.json(payload);
     } else {
+      getData.getFirefighterData(fighterId, datetime, (data)=>{
         payload = {
             code: 200,
             status: "success",
             id: fighterId,
-            data: getData.getFirefighterData(fighterId, datetime)
+            data: data
         }
+        res.json(payload);
+      });
     };
-   res.json(payload);
 });
 
 router.get('/firefighter/history', (req, res) => {
