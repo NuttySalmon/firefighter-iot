@@ -60,6 +60,7 @@ class Sensor:
                     'mov': self.get_mov(),
                     'o2': self.get_o2(),
                     'hcn': self.get_hcn(),
+                    'co': self.get_co(),
                     'battery': self.get_battery(),
                     'heart': self.get_heart(),
                     'button': self.get_button()
