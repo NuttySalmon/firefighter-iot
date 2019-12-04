@@ -4,3 +4,29 @@
   <div class="card-header chart-card-title">
     <div class = "row"> 
       <div class="col" style="max-width:fit-content"><h2><%=team.name%></h2></div>
+	</div>
+  </div>
+  <div class="card-body chart-card-body">
+	<% for (var mem=0; mem<2; mem++){%>
+	  <h5> Insert Member Name Here </h5>
+      <% for (var col=0; col<3; col++){%>
+      <div class="row">
+        <% for (var i=col*3; i<fields.length && i < (col+1)*3; i++){%>
+        <div class="col-4 mb-3">
+          <h5>
+          <div class="row">
+            <div class="col chart-title"><%=fields[i].name%></div>
+            <div id="<%=fields[i].tag%>-value" class="col value"></div>
+            <div class="col unit"><%-fields[i].unit%></div>
+          </div> </h5>
+          <div class="row col">
+            <div id="<%=fields[i].tag%>-overlay" class="overlay"><div id="text" class="overlay-text">No data</div></div>
+            <div id="<%=fields[i].tag%>-chart" class="chart"></div>
+          </div>
+        </div>
+        <%}%>
+      </div>
+      <%}%>
+	<%}%>
+  </div>
+</div>
