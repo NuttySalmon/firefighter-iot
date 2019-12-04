@@ -51,6 +51,7 @@ var paramsMem = {
 };
 };
 
+/*****************End Retrieve Data*************************************/
 
 // Call DynamoDB to add the item to the table
 ddb.putItem(paramsTeam, function(err, data) {
