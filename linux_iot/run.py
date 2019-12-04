@@ -47,7 +47,7 @@ def start_publish(devices, client):
             "lng": -121.493181 + random()/4000
         }
         client.publish(payload) 
-        time.sleep(1)
+        time.sleep(0.2)
         
 
 def main():
