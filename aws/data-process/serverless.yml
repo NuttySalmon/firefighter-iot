@@ -22,7 +22,7 @@ provider:
       Resource: !GetAtt MemberTable.Arn
     - Effect: 'Allow'
       Action:
-        - 'dynamodb:PutItem'
+        - 'dynamodb:BatchWriteItem'
       Resource: !GetAtt MemberTable.Arn
 functions:
   data-process:
@@ -65,7 +65,7 @@ resources: # CloudFormation template syntax from here on.
           WriteCapacityUnits: 1
         TimeToLiveSpecification:
           AttributeName: TTL
-          Enabled: Boolean
+          Enabled: True
 
 
 
