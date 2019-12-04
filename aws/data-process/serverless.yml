@@ -10,19 +10,11 @@ provider:
   iamRoleStatements:
     - Effect: 'Allow'
       Action:
-        - 'dynamodb:GetItem'
+        - 'dynamodb:*'
       Resource: !GetAtt TeamTable.Arn
     - Effect: 'Allow'
       Action:
-        - 'dynamodb:PutItem'
-      Resource: !GetAtt TeamTable.Arn
-    - Effect: 'Allow'
-      Action:
-        - 'dynamodb:GetItem'
-      Resource: !GetAtt MemberTable.Arn
-    - Effect: 'Allow'
-      Action:
-        - 'dynamodb:BatchWriteItem'
+        - 'dynamodb:*'
       Resource: !GetAtt MemberTable.Arn
 functions:
   data-process:

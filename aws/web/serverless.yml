@@ -10,11 +10,11 @@ provider:
   iamRoleStatements:
     - Effect: 'Allow'
       Action:
-        - 'dynamodb:GetItem'
+        - 'dynamodb:*'
       Resource: !ImportValue TeamTableArn
     - Effect: 'Allow'
       Action:
-        - 'dynamodb:GetItem'
+        - 'dynamodb:*'
       Resource: !ImportValue MemberTableArn
 functions:
   web:

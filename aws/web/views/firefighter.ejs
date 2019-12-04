@@ -66,11 +66,10 @@ am4core.ready(function(){
     });
   });
   // start timed job
-  startInterval(id, interval, (data, i)=>{
-    curr = new Date(testDate).setMilliseconds(0) - interval + i;
+  startInterval(id, interval, (data)=>{
     fields.forEach((field) => {
       let tag = field.tag;
-      updateData(charts[tag], tag, data[tag]); // add new data
+      updateData(charts[tag], tag, data[tag], data['datetime']); // add new data
     });
   });
 });
