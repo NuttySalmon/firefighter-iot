@@ -17,13 +17,13 @@ function getFirefighterData(id, datetime){
             status: 'Active',
             temp: (Math.random() > 0.5 ? 1 : -1) * Math.random()/10 + 100,
             hum: (Math.random() > 0.5 ? 1 : -1) * Math.random()/10 + 50,
-			//pres: ,
+			pres: (Math.random() > 0.5 ? 1 : -1) * Math.random()/10 + 100,
 			o2: (Math.random() > 0.5 ? 1 : -1) * Math.random()/10 + 40,
 			co: (Math.random() > 0.5 ? 1 : -1) * Math.random()/10 + 60,
 			hcn: (Math.random() > 0.5 ? 1 : -1) * Math.random()/10 + 50,
-			heart: (Math.random() > 0.5 ? 20 : -20) * Math.random()/10 + 160
-			//mov: ,
-			//battery:
+			heart: (Math.random() > 0.5 ? 20 : -20) * Math.random()/10 + 160,
+			mov: (Math.random() > 0.5 ? 1 : -1) * Math.random()/10 + 100,
+			battery: (Math.random() > 0.5 ? 1 : -1) * Math.random()/10 + 100
         };
     return result;
 }
