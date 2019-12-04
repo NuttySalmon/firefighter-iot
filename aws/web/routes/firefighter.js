@@ -19,7 +19,7 @@ router.get('/:id', (req, res) => {
             {name: 'HCN concentration', tag:'hcn', unit: 'ppm'},
             {name: 'Heart rate', tag:'heart', unit: 'bpm'},
             {name: 'Movement', tag:'mov', unit: ''},
-	    {name: 'Battery', tag:'battery', unit: '&#37;'}
+			{name: 'Battery', tag:'battery', unit: '&#37;'}
         ]
     });
 });
