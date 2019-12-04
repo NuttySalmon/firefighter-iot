@@ -20,6 +20,7 @@ function getFirefighterData(id, datetime){
 		return  result;
 */
 
+//~Comment the below portion if you want to reuse the above commented function...
 /*****************Declare DynamoDB Service*************************************/
 // Load the AWS SDK for Node.js
 var AWS = require('aws-sdk');
@@ -38,7 +39,7 @@ var ddb = new AWS.DynamoDB({apiVersion: '2012-08-10'});
 		 S: datetime 
 		}
 	  }, 
-	  TableName: "Teams"
+	  TableName: "Members"
 	 };
 	};
 	 ddb.getItem(params, function(err, data) {
@@ -47,6 +48,7 @@ var ddb = new AWS.DynamoDB({apiVersion: '2012-08-10'});
 	 });
 /*****************End Get Firefighter Data*************************************/
      return data;
+//~Commented out to here...
 }
 
 function getFirefighterDataHistory(id, datetime, count){
