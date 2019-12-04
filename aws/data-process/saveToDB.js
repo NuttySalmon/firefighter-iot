@@ -21,7 +21,7 @@ AWS.config.update({region: 'us-east-1'});
 // Create DynamoDB service object
 var ddb = new AWS.DynamoDB({apiVersion: '2012-08-10'});
 
-/*****************Retrieve Data*************************************/
+/*****************Put Data*************************************/
 
 exports.handler = async (event, context, callback) =>{
 	
@@ -66,7 +66,7 @@ exports.handler = async (event, context, callback) =>{
 		};
 	};
 
-	/*****************End Retrieve Data*************************************/
+	/*****************End Put Data*************************************/
 
 	// Call DynamoDB to add the item to the table
 	ddb.putItem(paramsTeam, function(err, data) {

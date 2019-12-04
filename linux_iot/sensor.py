@@ -1,6 +1,21 @@
-from bluepy.sensortag import SensorTag
+from bluepy.sensortag import SensorTag, KeypressDelegate
 from random import uniform, randrange
 from bluepy.btle import BTLEDisconnectError
+from threading import Lock
+
+class KeypressHandler(KeypressDelegate):
+    def __init__(self):
+       super().__init__()
+       self.button = False
+
+    def onButtonUp(self, but):
+        if but == 0x01: # right button
+            self.button = False 
+
+    def onButtonDown(self, but):
+        if but == 0x01:  # right button
+            self.button = True 
+        
 class Sensor:
     def __init__(self, addr, deviceId, mov_offset=2):
         self.addr = addr
@@ -8,6 +23,9 @@ class Sensor:
         self.device = None
         self.mov_offset = mov_offset
         self.connected = False
+        self.button =False
+        self.keypress_handle = KeypressHandler()
+        self.lock = Lock()
 
     def connect(self):
         try:
@@ -16,10 +34,12 @@ class Sensor:
             device.humidity.enable()
             device.accelerometer.enable()
             device.battery.enable()
+            device.keypress.enable()
+            device.setDelegate(self.keypress_handle)
             self.device = device
             self.connected = True
             return True
-        except BTLEDisconnectError:
+        except Exception:
             self.connected = False
             return False
 
@@ -29,23 +49,32 @@ class Sensor:
             self.connected = False
 
     def get_data(self):
+        data = { 'deviceId': self.deviceId }
         if self.connected:
             temp, pres = self.get_temp_pres()
-            data = {
-                'connected': True,
-                'temp': temp,
-                'pres': pres,
-                'hum': self.get_hum(),
-                'mov': self.get_mov(),
-                'o2': self.get_o2(),
-                'hcn': self.get_hcn(),
-                'battery': self.get_battery(),
-                'heart': self.get_heart()
-            }
-        else:
-            data = { 'connected': False }
+            try:
+                sensor_data = {
+                    'temp': temp,
+                    'pres': pres,
+                    'hum': self.get_hum(),
+                    'mov': self.get_mov(),
+                    'o2': self.get_o2(),
+                    'hcn': self.get_hcn(),
+                    'battery': self.get_battery(),
+                    'heart': self.get_heart(),
+                    'button': self.get_button()
+                }
+                data.update(sensor_data)
+            except Exception as e:
+                self.disconnect()
+                data['error']: e
+
+        data['connected'] = self.connected
         return data
-        
+
+    def get_button(self):
+        return self.keypress_handle.button
+
     def get_hum(self):
         temp, hum = self.device.humidity.read() 
         return hum
@@ -63,7 +92,7 @@ class Sensor:
         return randrange(110, 120)
 
     def get_o2(self):
-        return 9
+        return 85
 
     def get_hcn(self):
         return uniform(30, 75) 
