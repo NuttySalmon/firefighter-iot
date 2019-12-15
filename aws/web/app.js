@@ -8,10 +8,15 @@ app.set('view engine', 'ejs');
 
 //routes
 
-app.use("/firefighter", require('./routes/firefighter'));
-app.use("/api", require('./routes/api'));
-app.use("/team", require('./routes/team'));
-app.use("/", require('./routes/index'));
+app.get('/', (req, res) => {
+  res.redirect('./dashboard/');
+});
+
+app.use("/dashboard/", require('./routes/index'));
+app.use("/dashboard/firefighter", require('./routes/firefighter'));
+app.use("/dashboard/api", require('./routes/api'));
+app.use("/dashboard/team", require('./routes/team'));
+app.use("/dashboard/", require('./routes/index'));
 
 //for running locally
 module.exports.app = app;

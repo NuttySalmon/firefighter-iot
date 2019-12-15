@@ -29,8 +29,8 @@ function initMap() {
       //clear all listeners
       google.maps.event.clearListeners(currMarker, 'click');
       //popup content
-      let infowincontent = '<div style="color: black"><b><a href="../team/' + id + '">' +
-        id +
+      let infowincontent = '<div style="color: black"><b><a href="./team/' + id + '">' +
+        "Team " + id +
         '</b><a><br/>Status: ' +
         team.status + '<br/> Devices: <br/><ul>' +
         getMemberLinks(team.members) +
@@ -56,7 +56,7 @@ function getMemberLinks(membersStr){
     var memberStrArr = membersStr.split(",");
     
     memberStrArr.forEach((memberStr)=>{
-      output += '<li><a href=\"../../firefighter/\"'  + memberStr +  '">' + 
+      output += '<li><a href=\"./firefighter/'  + memberStr +  '\">' + 
              memberStr + '</a></li>'
     });
   }
@@ -81,7 +81,7 @@ function startInterval(callback) {
   var date = new Date();
   interval = setInterval(() => {
     $.ajax({
-      url: '../api/teams',
+      url: './api/teams',
       type: 'GET',
       success: (response) => {
         $('.overlay').css('display', 'none');
