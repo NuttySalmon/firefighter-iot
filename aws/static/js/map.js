@@ -32,9 +32,9 @@ function initMap() {
       let infowincontent = '<div style="color: black"><b><a href="../team/' + id + '">' +
         id +
         '</b><a><br/>Status: ' +
-        team.status + '<br/> Devices: ' +
-        team.members +
-        '</div>';
+        team.status + '<br/> Devices: <br/><ul>' +
+        getMemberLinks(team.members) +
+        '</ul></div>';
 
 
       currMarker.setPosition(point);
@@ -48,6 +48,19 @@ function initMap() {
 
     });
   });
+}
+
+function getMemberLinks(membersStr){
+  var output = "";
+  if (membersStr != undefined){
+    var memberStrArr = membersStr.split(",");
+    
+    memberStrArr.forEach((memberStr)=>{
+      output += '<li><a href=\"../../firefighter/\"'  + memberStr +  '">' + 
+             memberStr + '</a></li>'
+    });
+  }
+  return output
 }
 
 function zoomToFit(newPoint) {

@@ -65,7 +65,7 @@ exports.handler = (event, context, callback) =>{
 	  Item: {
 		'id' : {N: event.clientId},
 		'status': {S: event.status},
-		'member': {S: members.toString()},
+		'members': {S: members.toString()},
 		'lat': {N: event.lat.toString()},
 		'lng': {N: event.lng.toString()}
 	  }
