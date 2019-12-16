@@ -7,7 +7,7 @@
 This project provides a solution to allow real time monitoring of firefighter team status and location as well as visualization of data from team member's on-body sensor.
 
 
-# Design Diagrams
+## Design Diagrams
 <kbd>
     <img src="./design_diagrams/system_design.png"
          alt="system design"
