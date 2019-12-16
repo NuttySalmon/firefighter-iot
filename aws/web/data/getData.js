@@ -26,7 +26,10 @@ function getFirefighterData(id, datetime, callback){
 
 
 
-
+/**
+Get old data for initialize graph
+NOT IMPLEMENTED WITH REAL DATA
+*/
 function getFirefighterDataHistory(id, epoch, count){
 
     var result = [];

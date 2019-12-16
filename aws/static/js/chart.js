@@ -29,6 +29,7 @@ function getISOLocal(date) {
 
 /**
 Get past data to initialize graph
+NOT IMPLEMENTED WITH REAL DATA
 */
 function getHistory(id, dataPoints, callback){
   let epoch = new Date() - 5000;
