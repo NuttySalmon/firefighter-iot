@@ -6,6 +6,21 @@
 
 This project provides a solution to allow real time monitoring of firefighter team status and location as well as visualization of data from team member's on-body sensor.
 
+
+# Design Diagrams
+<kbd>
+    <img src="./design_diagrams/system_design.png"
+         alt="system design"
+         style="margin: 1rem; padding: 1rem" />
+
+</kbd>
+<br><br><br>
+<kbd>
+    <img src="./design_diagrams/aws_implementation.png"
+     alt="AWS implementation" />
+</kbd>
+
+
 ## Resources and Implementation Overview
 Overview of how resources are used to implementation the different components of the project.
 
@@ -68,3 +83,4 @@ An AWS S3 bucket is used to host all the static elements for the web application
 #### AWS Lambda and DynamoDB (to parse and save data) 
 
 #### Serverless dashboard web application
+
