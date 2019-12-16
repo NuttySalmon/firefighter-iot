@@ -17,9 +17,10 @@ exports.handler = (event, context, callback) =>{
 	var requests = [];
 	
 	// calculate ttl
-	var datetime = event.datetime.toString();
-	var epoch = Math.floor(new Date().getTime() / 1000);
-	
+	const datetime = event.datetime.toString();
+	const epoch = Math.floor(new Date().getTime() / 1000);
+	const teamId = event.clientId;
+
 	console.log(epoch);
 	var ttl = epoch + ttlOffset;
 	
@@ -28,6 +29,7 @@ exports.handler = (event, context, callback) =>{
 		if (member.connected){
 			var item ={
 				'id': {S: member.deviceId.toString()},
+				'team': {N: teamId},
 				'datetime': {S: datetime},
 				'temp': {N: member.temp.toString()},
 				'pres': {N: member.pres.toString()},
@@ -63,7 +65,7 @@ exports.handler = (event, context, callback) =>{
 	var paramsTeam = {
 	  TableName: 'Teams',
 	  Item: {
-		'id' : {N: event.clientId},
+		'id' : {N: teamId},
 		'status': {S: event.status},
 		'members': {S: members.toString()},
 		'lat': {N: event.lat.toString()},

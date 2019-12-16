@@ -5,7 +5,7 @@
     <div class = "row"> 
       <div class="col" style="max-width:fit-content"><h2><%=fighter.name%></h2></div>
       <div class="col">
-        <div class="col"> <span style="color: #646464;"> Team: </span> <span style="color: #B0B0B0;"> <%=fighter.team%></span></div>
+        <div class="col"> <span style="color: #646464;"> Team: </span> <span id="teamName" style="color: #B0B0B0;"></span></div>
         <div class="col"> <span style="color: #646464;"> Device: </span><span style="color: #B0B0B0;"><%=fighter.id%></span></div> 
       </div>
     </div>
@@ -50,9 +50,9 @@
 <script src="<%=staticPath%>js/chart.js"></script>
 <script>
 am4core.ready(function(){
-  var id = "<%=fighter.id%>"
+  const id = "<%=fighter.id%>"
   var charts = {}; // keep track of all the charts
-  var fields = <%-JSON.stringify(fields)%>;
+  const fields = <%-JSON.stringify(fields)%>;
   const dataPoints = 60;
   const verDist = 35;
   const horDist = 10;
@@ -67,6 +67,11 @@ am4core.ready(function(){
   });
   // start timed job
   startInterval(id, interval, (data)=>{
+    const teamId = data.team;
+    var teamName = '';
+    if (teamId != undefined)
+      teamName = "Team " + teamId;
+    document.getElementById('teamName').innerHTML = teamName;
     fields.forEach((field) => {
       let tag = field.tag;
       updateData(charts[tag], tag, data[tag], data['datetime']); // add new data
