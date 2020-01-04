@@ -1,5 +1,6 @@
-var express = require('express'),
-    router = express.Router();
+const express = require('express');
+
+const router = express.Router();
 
 router.get('/', (req, res) => {
   res.redirect('./map');
@@ -7,10 +8,9 @@ router.get('/', (req, res) => {
 
 
 router.get('/map', (req, res) => {
-    var fighterName = req.params.name;
-    res.render('index', {
-      title: 'Firefighter Tracker'
-    });
+  res.render('index', {
+    title: 'Firefighter Tracker',
+  });
 });
 
 module.exports = router;

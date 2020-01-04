@@ -1,21 +1,22 @@
 from bluepy.sensortag import SensorTag, KeypressDelegate
 from random import uniform, randrange
-from bluepy.btle import BTLEDisconnectError
 from threading import Lock
+
 
 class KeypressHandler(KeypressDelegate):
     def __init__(self):
-       super().__init__()
-       self.button = False
+        super().__init__()
+        self.button = False
 
     def onButtonUp(self, but):
-        if but == 0x01: # right button
-            self.button = False 
+        if but == 0x01:  # right button
+            self.button = False
 
     def onButtonDown(self, but):
         if but == 0x01:  # right button
-            self.button = True 
-        
+            self.button = True
+
+
 class Sensor:
     def __init__(self, addr, deviceId, mov_offset=2):
         self.addr = addr
@@ -23,7 +24,7 @@ class Sensor:
         self.device = None
         self.mov_offset = mov_offset
         self.connected = False
-        self.button =False
+        self.button = False
         self.keypress_handle = KeypressHandler()
         self.lock = Lock()
 
@@ -45,13 +46,13 @@ class Sensor:
 
     def disconnect(self):
         try:
-            if self.connected == True:
+            if self.connected is True:
                 self.device.disconnect()
         finally:
-                self.connected = False
+            self.connected = False
 
     def get_data(self):
-        data = { 'deviceId': self.deviceId }
+        data = {'deviceId': self.deviceId}
         if self.connected:
             temp, pres = self.get_temp_pres()
             try:
@@ -79,17 +80,17 @@ class Sensor:
         return self.keypress_handle.button
 
     def get_hum(self):
-        temp, hum = self.device.humidity.read() 
+        temp, hum = self.device.humidity.read()
         return hum
 
     def get_mov(self):
-        x_y_z = self.device.accelerometer.read() 
+        x_y_z = self.device.accelerometer.read()
         mov = 0
         for val in x_y_z:
             mov += abs(val)
-            
+
         mov -= self.mov_offset
-        return mov 
+        return mov
 
     def get_heart(self):
         return randrange(110, 120)
@@ -98,14 +99,13 @@ class Sensor:
         return 85
 
     def get_hcn(self):
-        return uniform(68, 75) 
+        return uniform(68, 75)
 
     def get_co(self):
-        return  uniform(1270, 1300)
+        return uniform(1270, 1300)
 
     def get_temp_pres(self):
         return self.device.barometer.read()
 
     def get_battery(self):
         return self.device.battery.read()
-
