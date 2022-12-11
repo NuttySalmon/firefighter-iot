@@ -10,7 +10,7 @@
   "license": "ISC",
   "dependencies": {
     "ejs": "^3.0.1",
-    "express": "^4.17.1",
+    "express": "^4.17.3",
     "serverless-http": "^2.3.0"
   },
   "devDependencies": {
