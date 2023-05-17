@@ -6,17 +6,21 @@
 
 This project provides a solution to allow real time monitoring of firefighter team status and location as well as visualization of data from team member's on-body sensor.
 
+## UI Screenshots
+
+![dashboard](./images/dashboard.jpg)
+![map](./images/map.jpg)
 
 ## Design Diagrams
 <kbd>
-    <img src="./design_diagrams/system_design.png"
+    <img src="./images/system_design.png"
          alt="system design"
          style="margin: 1rem; padding: 1rem" />
 
 </kbd>
 <br><br><br>
 <kbd>
-    <img src="./design_diagrams/aws_implementation.png"
+    <img src="./images/aws_implementation.png"
      alt="AWS implementation" />
 </kbd>
 
@@ -74,7 +78,6 @@ An AWS S3 bucket is used to host all the static elements for the web application
 
   
 # Setup and deploy
-(To be completed)
 
 #### AWS IoT core
 
